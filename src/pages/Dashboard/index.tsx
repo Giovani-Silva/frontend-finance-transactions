@@ -10,7 +10,13 @@ import Header from '../../components/Header';
 
 import formatValue from '../../utils/formatValue';
 
-import { Container, CardContainer, Card, TableContainer } from './styles';
+import {
+  Container,
+  CardContainer,
+  Card,
+  TableContainer,
+  Delete,
+} from './styles';
 
 interface Transaction {
   id: string;
@@ -43,15 +49,12 @@ const Dashboard: React.FC = () => {
     loadTransactions();
   }, []);
 
-  // function numberFormat(value: number): string {
-  //   const valor = new Intl.NumberFormat('pt-BR', {
-  //     style: 'currency',
-  //     currency: 'BRL',
-  //     minimumFractionDigits: 2,
-  //   }).format(value);
-
-  //   return valor;
-  // }
+  async function deleteTransaction(id: string): Promise<void> {
+    await api.delete(`transactions/${id}`);
+    const response = await api.get(`transactions`);
+    setTransactions(response.data.transactions);
+    setBalance(response.data.balance);
+  }
 
   return (
     <>
@@ -91,6 +94,7 @@ const Dashboard: React.FC = () => {
                 <th>Preço</th>
                 <th>Categoria</th>
                 <th>Data</th>
+                <th>Action</th>
               </tr>
             </thead>
 
@@ -113,6 +117,11 @@ const Dashboard: React.FC = () => {
                         year: 'numeric',
                       },
                     )}
+                  </td>
+                  <td>
+                    <Delete onClick={() => deleteTransaction(transaction.id)}>
+                      X
+                    </Delete>
                   </td>
                 </tr>
               ))}

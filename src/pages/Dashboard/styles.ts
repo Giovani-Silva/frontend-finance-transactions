@@ -93,3 +93,9 @@ export const TableContainer = styled.section`
     }
   }
 `;
+
+export const Delete = styled.button`
+  background: transparent;
+  border: 0;
+  color: crimson;
+`;
